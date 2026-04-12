@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { box-sizing: border-box; }
+
+body {
+  font-family: Arial, sans-serif;
+  padding: 16px;
+  max-width: 860px;
+  margin: 0;
+  background: #fff;
+  color: #111;
+}
+
+h2 {
+  color: #003366;
+  margin-top: 0;
+  font-size: 20px;
+}
+
+p.disclaimer {
+  font-size: 13px;
+  color: #555;
+  margin-top: -8px;
+  margin-bottom: 20px;
+}
+
+.question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 4px;
+  gap: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.question-text {
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.subtext {
+  font-size: 12px;
+  color: #666;
+  font-weight: normal;
+  margin-top: 3px;
+}
+
+.priority-label {
+  font-size: 11px;
+  color: #7a4f00;
+  background: #fff3cd;
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-top: 3px;
+  display: inline-block;
+}
+
+.button-group {
+  display: inline-flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.button-group input[type="radio"] {
+  display: none;
+}
+
+.button-group label {
+  padding: 6px 18px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #f8f9fa;
+  font-size: 14px;
+  font-weight: normal;
+  user-select: none;
+}
+
+.button-group label:hover {
+  background-color: #e9ecef;
+}
+
+.button-group input[type="radio"]:checked + label {
+  background-color: #003366;
+  color: #fff;
+  border-color: #003366;
+}
+
+/* Outside Toronto banner */
+#outside-result {
+  display: none;
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #f0f4f0;
+  border-left: 4px solid #2e7d32;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#outside-result strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 6px;
+  color: #1b5e20;
+}
+
+.postal-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+#postal-input {
+  padding: 8px 12px;
+  font-size: 15px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  width: 140px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: Arial, sans-serif;
+}
+
+#postal-input:focus {
+  outline: 2px solid #2e7d32;
+  border-color: #2e7d32;
+}
+
+#oht-search-btn {
+  padding: 9px 18px;
+  background-color: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+}
+
+#oht-search-btn:hover { background-color: #1b5e20; }
+#oht-search-btn:disabled { background-color: #888; cursor: default; }
+
+#postal-hint {
+  font-size: 13px;
+  color: #2e7d32;
+  font-weight: bold;
+  display: none;
+  margin-top: 8px;
+}
+
+/* French routing banner */
+#french-result {
+  display: none;
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #e8f4fd;
+  border-left: 4px solid #1a73e8;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#french-result strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 6px;
+  color: #003366;
+}
+
+/* Scoring questions section */
+#scoring-section {
+  display: block;
+}
+
+#result {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #f1f3f5;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333;
+  font-weight: normal;
+}
+
+#result.attach {
+  background-color: #fff3cd;
+  border-left: 4px solid #f0a500;
+}
+
+#result.review {
+  background-color: #d4edda;
+  border-left: 4px solid #28a745;
+}
+
+#result strong {
+  font-size: 16px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.score-note {
+  font-size: 13px;
+  color: #555;
+  margin-top: 4px;
+}
+
+.map-button {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 9px 18px;
+  background-color: #003366;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.map-button:hover {
+  background-color: #00244d;
+}
+
+.map-button.oht {
+  background-color: #2e7d32;
+}
+
+.map-button.oht:hover {
+  background-color: #1b5e20;
+}
+  background-color: #1a73e8;
+}
+
+.map-button.franco:hover {
+  background-color: #1558b0;
+}
+</style>
+</head>
+
+<body>
+
+<h2>FHC Centralized Attachment Decision&#8209;Support Tool</h2>
+<p class="disclaimer"><em>Decision support only &mdash; for staff use. No information is saved or collected.</em></p>
+
+<!-- LOCATION QUESTION (shown first) -->
+<div class="question" id="location-question">
+  <div class="question-text">
+    Does the patient live in Toronto?
+    <div class="subtext">If outside Toronto, you will be directed to Ontario Health Teams.</div>
+  </div>
+  <div class="button-group">
+    <input id="locYes" type="radio" name="loc" value="toronto"><label for="locYes">Yes</label>
+    <input id="locNo" type="radio" name="loc" value="outside"><label for="locNo">No</label>
+  </div>
+</div>
+
+<!-- TORONTO DIRECTORY PANEL (shown when patient lives in Toronto) -->
+<div id="toronto-directory" style="display:none; margin-top:12px; padding:16px; border-radius:8px; background-color:#ede7f6; border-left:4px solid #5c6bc0;">
+  <div style="font-size:15px; color:#311b92; font-weight:bold; margin-bottom:4px;">Find the patient's Toronto OHT</div>
+  <div style="font-size:13px; color:#444; margin-bottom:12px;">Enter the first 3 characters of their postal code to identify their Ontario Health Team.</div>
+  <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+    <input id="toronto-postal-input" type="text" maxlength="3" placeholder="e.g. M4N"
+      autocomplete="off" spellcheck="false"
+      style="padding:8px 12px; font-size:15px; border:1px solid #aaa; border-radius:6px; width:110px; text-transform:uppercase; letter-spacing:1px; font-family:Arial,sans-serif;">
+    <button id="toronto-lookup-btn"
+      style="padding:9px 18px; background-color:#5c6bc0; color:#fff; border:none; border-radius:6px; font-weight:bold; font-size:14px; cursor:pointer; font-family:Arial,sans-serif;">
+      Find OHT &rarr;
+    </button>
+  </div>
+  <div id="toronto-oht-result" style="margin-top:12px; display:none;"></div>
+  <div style="margin-top:14px; padding-top:14px; border-top:1px solid #c5b3e6; font-size:13px; color:#555;">
+    Can't find it? Browse all Toronto health &amp; social services:
+    <a href="https://torontoservicedirectory.ca/" target="_blank" rel="noopener noreferrer"
+       style="display:inline-block; margin-top:8px; padding:7px 14px; background-color:#5c6bc0; color:#fff; border-radius:6px; text-decoration:none; font-weight:bold; font-size:13px;">
+      Toronto Health &amp; Social Services Directory &rarr;
+    </a>
+  </div>
+</div>
+
+<!-- OUTSIDE TORONTO PATHWAY -->
+<div id="outside-result">
+  <strong>Patient is outside Toronto — Find their OHT</strong>
+  Enter the patient's postal code to identify their Ontario Health Team.
+  <div class="subtext" style="margin-top:4px;">The result will appear below with a direct link to open.</div>
+  <div class="postal-row">
+    <input id="postal-input" type="text" maxlength="7" placeholder="e.g. L4T 1A1" autocomplete="off" spellcheck="false">
+    <button id="oht-search-btn" disabled>Find OHT &rarr;</button>
+  </div>
+  <div id="postal-hint" style="display:none; margin-top:12px; padding:12px; background:#f0f7f0; border-radius:6px; border-left:3px solid #2e7d32;"></div>
+
+  <div style="margin-top:16px; padding-top:16px; border-top:1px solid #b2d0b4;">
+    <div style="font-size:14px; font-weight:bold; color:#1b5e20; margin-bottom:8px;">Also register for Health Care Connect (HCC)</div>
+    <div style="font-size:13px; color:#333; margin-bottom:10px;">Help the patient register to be matched with a family doctor or nurse practitioner in their area.</div>
+    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+      <a href="https://ontario.ca/healthcareconnect" target="_blank" rel="noopener noreferrer"
+         style="display:inline-block; padding:8px 14px; background-color:#2e7d32; color:#fff; border-radius:6px; text-decoration:none; font-weight:bold; font-size:13px;">
+        Register Online &rarr;
+      </a>
+      <a href="tel:18885796707"
+         style="display:inline-block; padding:8px 14px; background-color:#fff; color:#2e7d32; border:1.5px solid #2e7d32; border-radius:6px; text-decoration:none; font-weight:bold; font-size:13px;">
+        Call 1-888-579-6707
+      </a>
+      <a href="tel:811"
+         style="display:inline-block; padding:8px 14px; background-color:#fff; color:#2e7d32; border:1.5px solid #2e7d32; border-radius:6px; text-decoration:none; font-weight:bold; font-size:13px;">
+        Call 8-1-1 (24/7)
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FRENCH LANGUAGE QUESTION (shown first, controls visibility of scoring section) -->
+<div class="question" id="french-question">
+  <div class="question-text">
+    Does the patient primarily speak French?
+    <div class="subtext">If yes, a direct francophone pathway will be shown.</div>
+  </div>
+  <div class="button-group">
+    <input id="langFr" type="radio" name="lang" value="fr"><label for="langFr">Yes</label>
+    <input id="langOther" type="radio" name="lang" value="other"><label for="langOther">No</label>
+  </div>
+</div>
+
+<!-- FRANCO PATHWAY (shown only when French selected) -->
+<div id="french-result">
+  <strong>Francophone pathway identified</strong>
+  This patient should be directed to Centre francophone de Toronto, which provides French-language primary care and wraparound services.<br>
+  <a class="map-button franco" href="https://ac.centrefranco.org/en" target="_blank" rel="noopener noreferrer">
+    Open Centre Franco Referral &rarr;
+  </a>
+</div>
+
+<!-- SCORING QUESTIONS (hidden when French is selected) -->
+<div id="scoring-section">
+
+  <div class="question">
+    <div class="question-text">
+      1. Requires language interpretation (no English/French)?
+      <div class="priority-label">Priority indicator</div>
+    </div>
+    <div class="button-group">
+      <input id="q1y" type="radio" name="q1" value="1"><label for="q1y">Yes</label>
+      <input id="q1n" type="radio" name="q1" value="0"><label for="q1n">No</label>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="question-text">
+      2. Has IFH coverage or is uninsured?
+      <div class="priority-label">Priority indicator</div>
+    </div>
+    <div class="button-group">
+      <input id="q2y" type="radio" name="q2" value="1"><label for="q2y">Yes</label>
+      <input id="q2n" type="radio" name="q2" value="0"><label for="q2n">No</label>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="question-text">3. Requests system navigation support?</div>
+    <div class="button-group">
+      <input id="q3y" type="radio" name="q3" value="1"><label for="q3y">Yes</label>
+      <input id="q3n" type="radio" name="q3" value="0"><label for="q3n">No</label>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="question-text">
+      4. Has unstable housing?
+      <div class="priority-label">Priority indicator</div>
+    </div>
+    <div class="button-group">
+      <input id="q4y" type="radio" name="q4" value="1"><label for="q4y">Yes</label>
+      <input id="q4n" type="radio" name="q4" value="0"><label for="q4n">No</label>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="question-text">5. Has difficulty paying for basic needs?</div>
+    <div class="button-group">
+      <input id="q5y" type="radio" name="q5" value="1"><label for="q5y">Yes</label>
+      <input id="q5n" type="radio" name="q5" value="0"><label for="q5n">No</label>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="question-text">6. Lacks social support?</div>
+    <div class="button-group">
+      <input id="q6y" type="radio" name="q6" value="1"><label for="q6y">Yes</label>
+      <input id="q6n" type="radio" name="q6" value="0"><label for="q6n">No</label>
+    </div>
+  </div>
+
+  <div class="question">
+    <div class="question-text">
+      7. Has transportation challenges?
+      <div class="subtext">Consider proximity to home when selecting a location.</div>
+    </div>
+    <div class="button-group">
+      <input id="q7y" type="radio" name="q7" value="1"><label for="q7y">Yes</label>
+      <input id="q7n" type="radio" name="q7" value="0"><label for="q7n">No</label>
+    </div>
+  </div>
+
+  <div id="result">
+    <em>Answer the questions above to see a recommendation.</em>
+  </div>
+
+</div><!-- end scoring-section -->
+
+<script>
+(function () {
+
+  var PRIORITY_QUESTIONS = [1, 2, 4];
+  var TOTAL_QUESTIONS = 7;
+  var SCORE_THRESHOLD = 3;
+
+  var CHC_MAP_URL =
+    "https://www.google.com/maps/d/u/0/viewer" +
+    "?mid=1p3iGPPZT8No64F0FbneAmLA-69RyWrd8" +
+    "&ll=43.6958272292501%2C-79.39383342889403" +
+    "&z=12";
+
+  var PARTNER_MAP_URL =
+    "https://www.google.com/maps/d/u/0/viewer" +
+    "?mid=1ASlK4iRrXa_u4iM948jCfczDcZJZ9Xc" +
+    "&ll=43.70262209518865%2C-79.35096099999998" +
+    "&z=15";
+
+  /* --- Location toggle --- */
+  function handleLocation() {
+    var loc = document.querySelector('input[name="loc"]:checked');
+    if (!loc) return;
+
+    var outsideResult = document.getElementById("outside-result");
+    var torontoDir = document.getElementById("toronto-directory");
+    var frenchQuestion = document.getElementById("french-question");
+    var frenchResult = document.getElementById("french-result");
+    var scoringSection = document.getElementById("scoring-section");
+
+    if (loc.value === "outside") {
+      outsideResult.style.display = "block";
+      torontoDir.style.display = "none";
+      frenchQuestion.style.display = "none";
+      frenchResult.style.display = "none";
+      scoringSection.style.display = "none";
+    } else {
+      outsideResult.style.display = "none";
+      torontoDir.style.display = "block";
+      frenchQuestion.style.display = "flex";
+      handleLanguage();
+    }
+  }
+
+  /* --- French language toggle --- */
+  function handleLanguage() {
+    var lang = document.querySelector('input[name="lang"]:checked');
+    if (!lang) return;
+
+    var frResult = document.getElementById("french-result");
+    var scoringSection = document.getElementById("scoring-section");
+
+    if (lang.value === "fr") {
+      frResult.style.display = "block";
+      scoringSection.style.display = "none";
+    } else {
+      frResult.style.display = "none";
+      scoringSection.style.display = "block";
+    }
+  }
+
+  /* --- Scoring calculate --- */
+  function calculate() {
+    var score = 0;
+    var priority = false;
+    var answered = 0;
+
+    for (var i = 1; i <= TOTAL_QUESTIONS; i++) {
+      var checked = document.querySelector('input[name="q' + i + '"]:checked');
+      if (checked) {
+        answered++;
+        var val = Number(checked.value);
+        score += val;
+        if (val === 1 && PRIORITY_QUESTIONS.indexOf(i) !== -1) {
+          priority = true;
+        }
+      }
+    }
+
+    var r = document.getElementById("result");
+
+    if (answered === 0) {
+      r.className = "";
+      r.innerHTML = "<em>Answer the questions above to see a recommendation.</em>";
+      return;
+    }
+
+    if (priority || score >= SCORE_THRESHOLD) {
+      r.className = "attach";
+      r.innerHTML =
+        "<strong>Recommendation: Attach to CHC</strong>" +
+        "<span class='score-note'>Score: " + score + "/7" +
+        (priority ? " &mdash; priority indicator present" : "") + "</span><br>" +
+        "<a class='map-button' href='" + CHC_MAP_URL + "' target='_blank' rel='noopener noreferrer'>" +
+        "View CHC Locations Map</a>";
+    } else {
+      r.className = "review";
+      r.innerHTML =
+        "<strong>Recommendation: Partner community clinic</strong>" +
+        "<span class='score-note'>Score: " + score + "/7</span>";
+    }
+  }
+
+  /* --- Attach listeners --- */
+  var locRadios = document.querySelectorAll('input[name="loc"]');
+  for (var i = 0; i < locRadios.length; i++) {
+    locRadios[i].addEventListener("change", handleLocation);
+  }
+
+  var langRadios = document.querySelectorAll('input[name="lang"]');
+  for (var i = 0; i < langRadios.length; i++) {
+    langRadios[i].addEventListener("change", handleLanguage);
+  }
+
+  var scoreRadios = document.querySelectorAll('#scoring-section input[type="radio"]');
+  for (var j = 0; j < scoreRadios.length; j++) {
+    scoreRadios[j].addEventListener("change", calculate);
+  }
+
+  /* =================================================================
+     ONTARIO OHT LOOKUP TABLE — Outside Toronto
+     Source: IDS OHT Catchments Backgrounder (OHA, 2023)
+     Note: OHT catchments are defined by Census Subdivisions / Tracts.
+     FSA mapping below is a municipality-based approximation.
+     ================================================================= */
+  var ONTARIO_OHTS = {
+    /* --- PEEL REGION --- */
+    "L6P":{ name:"Central West OHT", area:"Brampton", url:"https://centralwestoht.ca/" },
+    "L6R":{ name:"Central West OHT", area:"Brampton", url:"https://centralwestoht.ca/" },
+    "L6S":{ name:"Central West OHT", area:"Brampton", url:"https://centralwestoht.ca/" },
+    "L6T":{ name:"Central West OHT", area:"Brampton", url:"https://centralwestoht.ca/" },
+    "L6V":{ name:"Central West OHT", area:"Brampton", url:"https://centralwestoht.ca/" },
+    "L6W":{ name:"Central West OHT", area:"Brampton", url:"https://centralwestoht.ca/" },
+    "L6X":{ name:"Central West OHT", area:"Brampton", url:"https://centralwestoht.ca/" },
+    "L6Y":{ name:"Central West OHT", area:"Brampton", url:"https://centralwestoht.ca/" },
+    "L6Z":{ name:"Central West OHT", area:"Brampton", url:"https://centralwestoht.ca/" },
+    "L7A":{ name:"Central West OHT", area:"Brampton", url:"https://centralwestoht.ca/" },
+    "L4T":{ name:"Central West OHT", area:"Malton/Brampton", url:"https://centralwestoht.ca/" },
+    "L4V":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L4W":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L4X":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L4Y":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L4Z":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5A":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5B":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5C":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5E":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5G":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5H":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5J":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5K":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5L":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5M":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5N":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5R":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5S":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5T":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5V":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    "L5W":{ name:"Mississauga Health OHT", area:"Mississauga", url:"https://moht.ca/" },
+    /* --- HALTON REGION --- */
+    "L7L":{ name:"Burlington OHT", area:"Burlington", url:"https://www.burlingtonoht.ca/" },
+    "L7M":{ name:"Burlington OHT", area:"Burlington", url:"https://www.burlingtonoht.ca/" },
+    "L7N":{ name:"Burlington OHT", area:"Burlington", url:"https://www.burlingtonoht.ca/" },
+    "L7P":{ name:"Burlington OHT", area:"Burlington", url:"https://www.burlingtonoht.ca/" },
+    "L7R":{ name:"Burlington OHT", area:"Burlington", url:"https://www.burlingtonoht.ca/" },
+    "L7S":{ name:"Burlington OHT", area:"Burlington", url:"https://www.burlingtonoht.ca/" },
+    "L7T":{ name:"Burlington OHT", area:"Burlington", url:"https://www.burlingtonoht.ca/" },
+    "L6H":{ name:"Connected Care Halton OHT", area:"Oakville", url:"https://connectedcarehalton.ca/" },
+    "L6J":{ name:"Connected Care Halton OHT", area:"Oakville", url:"https://connectedcarehalton.ca/" },
+    "L6K":{ name:"Connected Care Halton OHT", area:"Oakville", url:"https://connectedcarehalton.ca/" },
+    "L6L":{ name:"Connected Care Halton OHT", area:"Oakville", url:"https://connectedcarehalton.ca/" },
+    "L6M":{ name:"Connected Care Halton OHT", area:"Oakville", url:"https://connectedcarehalton.ca/" },
+    "L9T":{ name:"Connected Care Halton OHT", area:"Milton", url:"https://connectedcarehalton.ca/" },
+    "L7G":{ name:"Connected Care Halton OHT", area:"Georgetown / Halton Hills", url:"https://connectedcarehalton.ca/" },
+    "L7J":{ name:"Connected Care Halton OHT", area:"Acton / Halton Hills", url:"https://connectedcarehalton.ca/" },
+    /* --- YORK REGION --- */
+    "L4B":{ name:"Western York Region OHT", area:"Richmond Hill", url:"https://westernyorkregionoht.ca/" },
+    "L4C":{ name:"Western York Region OHT", area:"Richmond Hill", url:"https://westernyorkregionoht.ca/" },
+    "L4E":{ name:"Western York Region OHT", area:"Richmond Hill", url:"https://westernyorkregionoht.ca/" },
+    "L4S":{ name:"Western York Region OHT", area:"Richmond Hill", url:"https://westernyorkregionoht.ca/" },
+    "L4H":{ name:"Western York Region OHT", area:"Woodbridge / Vaughan", url:"https://westernyorkregionoht.ca/" },
+    "L4J":{ name:"Western York Region OHT", area:"Thornhill / Vaughan", url:"https://westernyorkregionoht.ca/" },
+    "L4K":{ name:"Western York Region OHT", area:"Concord / Vaughan", url:"https://westernyorkregionoht.ca/" },
+    "L4L":{ name:"Western York Region OHT", area:"Woodbridge", url:"https://westernyorkregionoht.ca/" },
+    "L6A":{ name:"Western York Region OHT", area:"Maple / Vaughan", url:"https://westernyorkregionoht.ca/" },
+    "L4G":{ name:"Northern York South Simcoe OHT", area:"Aurora", url:"https://nyssoht.ca/" },
+    "L3X":{ name:"Northern York South Simcoe OHT", area:"Newmarket", url:"https://nyssoht.ca/" },
+    "L3Y":{ name:"Northern York South Simcoe OHT", area:"Newmarket", url:"https://nyssoht.ca/" },
+    "L9N":{ name:"Northern York South Simcoe OHT", area:"Newmarket", url:"https://nyssoht.ca/" },
+    "L3Z":{ name:"Northern York South Simcoe OHT", area:"Bradford West Gwillimbury", url:"https://nyssoht.ca/" },
+    "L4P":{ name:"Northern York South Simcoe OHT", area:"Keswick / Georgina", url:"https://nyssoht.ca/" },
+    "L3P":{ name:"Eastern York Region and North Durham OHT", area:"Markham", url:"https://www.eyrnd.ca/" },
+    "L3R":{ name:"Eastern York Region and North Durham OHT", area:"Markham", url:"https://www.eyrnd.ca/" },
+    "L3S":{ name:"Eastern York Region and North Durham OHT", area:"Markham", url:"https://www.eyrnd.ca/" },
+    "L3T":{ name:"Eastern York Region and North Durham OHT", area:"Thornhill / Markham", url:"https://www.eyrnd.ca/" },
+    "L6B":{ name:"Eastern York Region and North Durham OHT", area:"Markham", url:"https://www.eyrnd.ca/" },
+    "L6C":{ name:"Eastern York Region and North Durham OHT", area:"Markham", url:"https://www.eyrnd.ca/" },
+    "L6E":{ name:"Eastern York Region and North Durham OHT", area:"Markham", url:"https://www.eyrnd.ca/" },
+    "L6G":{ name:"Eastern York Region and North Durham OHT", area:"Markham", url:"https://www.eyrnd.ca/" },
+    "L4A":{ name:"Eastern York Region and North Durham OHT", area:"Stouffville", url:"https://www.eyrnd.ca/" },
+    "L9P":{ name:"Eastern York Region and North Durham OHT", area:"Uxbridge", url:"https://www.eyrnd.ca/" },
+    /* --- DURHAM REGION --- */
+    "L1V":{ name:"Durham OHT", area:"Pickering", url:"https://www.doht.ca" },
+    "L1W":{ name:"Durham OHT", area:"Pickering", url:"https://www.doht.ca" },
+    "L1X":{ name:"Durham OHT", area:"Pickering", url:"https://www.doht.ca" },
+    "L1Y":{ name:"Durham OHT", area:"Pickering", url:"https://www.doht.ca" },
+    "L1Z":{ name:"Durham OHT", area:"Ajax", url:"https://www.doht.ca" },
+    "L1S":{ name:"Durham OHT", area:"Ajax", url:"https://www.doht.ca" },
+    "L1T":{ name:"Durham OHT", area:"Ajax", url:"https://www.doht.ca" },
+    "L1N":{ name:"Durham OHT", area:"Whitby", url:"https://www.doht.ca" },
+    "L1P":{ name:"Durham OHT", area:"Whitby", url:"https://www.doht.ca" },
+    "L1R":{ name:"Durham OHT", area:"Whitby", url:"https://www.doht.ca" },
+    "L1J":{ name:"Durham OHT", area:"Oshawa", url:"https://www.doht.ca" },
+    "L1G":{ name:"Durham OHT", area:"Oshawa", url:"https://www.doht.ca" },
+    "L1H":{ name:"Durham OHT", area:"Oshawa", url:"https://www.doht.ca" },
+    "L1K":{ name:"Durham OHT", area:"Oshawa", url:"https://www.doht.ca" },
+    /* --- HAMILTON / NIAGARA --- */
+    "L8E":{ name:"Greater Hamilton Health Network OHT", area:"Stoney Creek", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8G":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8H":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8J":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8K":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8L":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8M":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8N":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8P":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8R":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8S":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8T":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8V":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L8W":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L9A":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L9B":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L9C":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L9G":{ name:"Greater Hamilton Health Network OHT", area:"Ancaster / Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L9H":{ name:"Greater Hamilton Health Network OHT", area:"Dundas / Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L9K":{ name:"Greater Hamilton Health Network OHT", area:"Hamilton", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L3M":{ name:"Greater Hamilton Health Network OHT", area:"Grimsby", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L0R":{ name:"Greater Hamilton Health Network OHT", area:"Lincoln / West Lincoln", url:"https://greaterhamiltonhealthnetwork.ca/" },
+    "L2A":{ name:"Niagara OHT", area:"Fort Erie", url:"https://noht-eson.ca/" },
+    "L2E":{ name:"Niagara OHT", area:"Niagara Falls", url:"https://noht-eson.ca/" },
+    "L2G":{ name:"Niagara OHT", area:"Niagara Falls", url:"https://noht-eson.ca/" },
+    "L2H":{ name:"Niagara OHT", area:"Niagara Falls", url:"https://noht-eson.ca/" },
+    "L2J":{ name:"Niagara OHT", area:"Niagara Falls", url:"https://noht-eson.ca/" },
+    "L2M":{ name:"Niagara OHT", area:"St. Catharines", url:"https://noht-eson.ca/" },
+    "L2N":{ name:"Niagara OHT", area:"St. Catharines", url:"https://noht-eson.ca/" },
+    "L2P":{ name:"Niagara OHT", area:"St. Catharines", url:"https://noht-eson.ca/" },
+    "L2R":{ name:"Niagara OHT", area:"St. Catharines", url:"https://noht-eson.ca/" },
+    "L2S":{ name:"Niagara OHT", area:"St. Catharines", url:"https://noht-eson.ca/" },
+    "L2T":{ name:"Niagara OHT", area:"St. Catharines", url:"https://noht-eson.ca/" },
+    "L2V":{ name:"Niagara OHT", area:"Thorold / St. Catharines", url:"https://noht-eson.ca/" },
+    "L2W":{ name:"Niagara OHT", area:"St. Catharines", url:"https://noht-eson.ca/" },
+    "L3B":{ name:"Niagara OHT", area:"Welland", url:"https://noht-eson.ca/" },
+    "L3C":{ name:"Niagara OHT", area:"Welland", url:"https://noht-eson.ca/" },
+    "L3K":{ name:"Niagara OHT", area:"Port Colborne", url:"https://noht-eson.ca/" },
+    /* --- WATERLOO REGION --- */
+    "N2A":{ name:"KW4 OHT", area:"Kitchener", url:"https://www.kw4oht.com/" },
+    "N2B":{ name:"KW4 OHT", area:"Kitchener", url:"https://www.kw4oht.com/" },
+    "N2C":{ name:"KW4 OHT", area:"Kitchener", url:"https://www.kw4oht.com/" },
+    "N2E":{ name:"KW4 OHT", area:"Kitchener", url:"https://www.kw4oht.com/" },
+    "N2G":{ name:"KW4 OHT", area:"Kitchener", url:"https://www.kw4oht.com/" },
+    "N2H":{ name:"KW4 OHT", area:"Kitchener", url:"https://www.kw4oht.com/" },
+    "N2K":{ name:"KW4 OHT", area:"Waterloo", url:"https://www.kw4oht.com/" },
+    "N2L":{ name:"KW4 OHT", area:"Waterloo", url:"https://www.kw4oht.com/" },
+    "N2M":{ name:"KW4 OHT", area:"Kitchener", url:"https://www.kw4oht.com/" },
+    "N2N":{ name:"KW4 OHT", area:"Kitchener", url:"https://www.kw4oht.com/" },
+    "N2P":{ name:"KW4 OHT", area:"Kitchener", url:"https://www.kw4oht.com/" },
+    "N2R":{ name:"KW4 OHT", area:"Kitchener", url:"https://www.kw4oht.com/" },
+    "N2T":{ name:"KW4 OHT", area:"Waterloo", url:"https://www.kw4oht.com/" },
+    "N2V":{ name:"KW4 OHT", area:"Waterloo", url:"https://www.kw4oht.com/" },
+    "N1P":{ name:"Cambridge North Dumfries OHT", area:"Cambridge", url:"https://cndoht.com/" },
+    "N1R":{ name:"Cambridge North Dumfries OHT", area:"Cambridge", url:"https://cndoht.com/" },
+    "N1S":{ name:"Cambridge North Dumfries OHT", area:"Cambridge", url:"https://cndoht.com/" },
+    "N1T":{ name:"Cambridge North Dumfries OHT", area:"Cambridge", url:"https://cndoht.com/" },
+    /* --- GUELPH / WELLINGTON --- */
+    "N1E":{ name:"Guelph Wellington OHT", area:"Guelph", url:"https://guelphwellingtonoht.com/" },
+    "N1G":{ name:"Guelph Wellington OHT", area:"Guelph", url:"https://guelphwellingtonoht.com/" },
+    "N1H":{ name:"Guelph Wellington OHT", area:"Guelph", url:"https://guelphwellingtonoht.com/" },
+    "N1K":{ name:"Guelph Wellington OHT", area:"Guelph", url:"https://guelphwellingtonoht.com/" },
+    "N1L":{ name:"Guelph Wellington OHT", area:"Guelph", url:"https://guelphwellingtonoht.com/" },
+    "N1M":{ name:"Guelph Wellington OHT", area:"Centre Wellington / Fergus", url:"https://guelphwellingtonoht.com/" },
+    /* --- SIMCOE --- */
+    "L4M":{ name:"Barrie and Area OHT", area:"Barrie", url:"https://baoht.ca/" },
+    "L4N":{ name:"Barrie and Area OHT", area:"Barrie", url:"https://baoht.ca/" },
+    "L9J":{ name:"Barrie and Area OHT", area:"Barrie", url:"https://baoht.ca/" },
+    "L0L":{ name:"Barrie and Area OHT", area:"Innisfil / Barrie area", url:"https://baoht.ca/" },
+    "L9M":{ name:"North Simcoe OHT", area:"Penetanguishene", url:"https://www.nsoht.ca/" },
+    "L4R":{ name:"North Simcoe OHT", area:"Midland", url:"https://www.nsoht.ca/" },
+    "L9S":{ name:"South Georgian Bay OHT", area:"Wasaga Beach", url:"https://southgeorgianbayoht.ca/" },
+    "L9Y":{ name:"South Georgian Bay OHT", area:"Collingwood", url:"https://southgeorgianbayoht.ca/" },
+    "L9Z":{ name:"South Georgian Bay OHT", area:"Collingwood / Clearview", url:"https://southgeorgianbayoht.ca/" },
+    "L3V":{ name:"Couchiching OHT", area:"Orillia", url:"https://coht.ca/" },
+    "L0M":{ name:"Couchiching OHT", area:"Orillia area", url:"https://coht.ca/" },
+    /* --- LONDON / MIDDLESEX --- */
+    "N5V":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N5W":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N5X":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N5Y":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N5Z":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6A":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6B":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6C":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6E":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6G":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6H":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6J":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6K":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6L":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6M":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6N":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    "N6P":{ name:"Middlesex London OHT", area:"London", url:"https://mloht.ca/" },
+    /* --- SARNIA / CHATHAM / WINDSOR --- */
+    "N7S":{ name:"Sarnia Lambton OHT", area:"Sarnia", url:"https://www.sarnialambtonoht.ca/" },
+    "N7T":{ name:"Sarnia Lambton OHT", area:"Sarnia", url:"https://www.sarnialambtonoht.ca/" },
+    "N7V":{ name:"Sarnia Lambton OHT", area:"Sarnia", url:"https://www.sarnialambtonoht.ca/" },
+    "N7W":{ name:"Sarnia Lambton OHT", area:"Sarnia", url:"https://www.sarnialambtonoht.ca/" },
+    "N7X":{ name:"Sarnia Lambton OHT", area:"Sarnia", url:"https://www.sarnialambtonoht.ca/" },
+    "N8A":{ name:"Chatham-Kent OHT", area:"Chatham-Kent", url:"https://www.ckoht.ca/" },
+    "N8H":{ name:"Chatham-Kent OHT", area:"Chatham-Kent", url:"https://www.ckoht.ca/" },
+    "N8M":{ name:"Chatham-Kent OHT", area:"Chatham-Kent", url:"https://www.ckoht.ca/" },
+    "N8N":{ name:"Windsor Essex OHT", area:"Windsor area", url:"https://www.weoht.ca/" },
+    "N8P":{ name:"Windsor Essex OHT", area:"Windsor area", url:"https://www.weoht.ca/" },
+    "N8R":{ name:"Windsor Essex OHT", area:"Windsor area", url:"https://www.weoht.ca/" },
+    "N8S":{ name:"Windsor Essex OHT", area:"Windsor area", url:"https://www.weoht.ca/" },
+    "N8T":{ name:"Windsor Essex OHT", area:"Windsor area", url:"https://www.weoht.ca/" },
+    "N8V":{ name:"Windsor Essex OHT", area:"Windsor", url:"https://www.weoht.ca/" },
+    "N8W":{ name:"Windsor Essex OHT", area:"Windsor", url:"https://www.weoht.ca/" },
+    "N8X":{ name:"Windsor Essex OHT", area:"Windsor", url:"https://www.weoht.ca/" },
+    "N8Y":{ name:"Windsor Essex OHT", area:"Windsor", url:"https://www.weoht.ca/" },
+    "N9A":{ name:"Windsor Essex OHT", area:"Windsor", url:"https://www.weoht.ca/" },
+    "N9B":{ name:"Windsor Essex OHT", area:"Windsor", url:"https://www.weoht.ca/" },
+    "N9C":{ name:"Windsor Essex OHT", area:"Windsor", url:"https://www.weoht.ca/" },
+    "N9E":{ name:"Windsor Essex OHT", area:"Windsor", url:"https://www.weoht.ca/" },
+    "N9G":{ name:"Windsor Essex OHT", area:"LaSalle", url:"https://www.weoht.ca/" },
+    "N9H":{ name:"Windsor Essex OHT", area:"Windsor", url:"https://www.weoht.ca/" },
+    "N9J":{ name:"Windsor Essex OHT", area:"Amherstburg", url:"https://www.weoht.ca/" },
+    "N9K":{ name:"Windsor Essex OHT", area:"Essex", url:"https://www.weoht.ca/" },
+    "N0R":{ name:"Windsor Essex OHT", area:"Essex County", url:"https://www.weoht.ca/" },
+    /* --- KINGSTON / FRONTENAC --- */
+    "K7K":{ name:"Frontenac, Lennox & Addington OHT", area:"Kingston", url:"https://www.flaoht.ca/" },
+    "K7L":{ name:"Frontenac, Lennox & Addington OHT", area:"Kingston", url:"https://www.flaoht.ca/" },
+    "K7M":{ name:"Frontenac, Lennox & Addington OHT", area:"Kingston", url:"https://www.flaoht.ca/" },
+    "K7N":{ name:"Frontenac, Lennox & Addington OHT", area:"Kingston", url:"https://www.flaoht.ca/" },
+    "K7P":{ name:"Frontenac, Lennox & Addington OHT", area:"Kingston", url:"https://www.flaoht.ca/" },
+    /* --- BELLEVILLE / HASTINGS --- */
+    "K8N":{ name:"Hastings Prince Edward OHT", area:"Belleville", url:"https://hpeoht.ca/" },
+    "K8P":{ name:"Hastings Prince Edward OHT", area:"Belleville", url:"https://hpeoht.ca/" },
+    "K8R":{ name:"Hastings Prince Edward OHT", area:"Belleville", url:"https://hpeoht.ca/" },
+    "K8V":{ name:"Hastings Prince Edward OHT", area:"Trenton / Quinte West", url:"https://hpeoht.ca/" },
+    /* --- OTTAWA --- */
+    "K1A":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1B":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1C":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1E":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1G":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1H":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1J":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1K":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1L":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1M":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1N":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1P":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1R":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1S":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1T":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1V":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1W":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1X":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1Y":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K1Z":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2A":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2B":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2C":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2E":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2G":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2H":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2J":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2K":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2L":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2M":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2P":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2R":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2S":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2T":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2V":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" },
+    "K2W":{ name:"Ottawa OHT", area:"Ottawa", url:"https://www.ottawaoht-eso.com/" }
+  };
+
+  /* --- Postal code search (outside Toronto) --- */
+  var postalInput = document.getElementById("postal-input");
+  var ohtBtn = document.getElementById("oht-search-btn");
+  var postalHint = document.getElementById("postal-hint");
+  var OHT_URL = "https://www.ontario.ca/page/ontario-health-teams";
+
+  function formatPostal(val) {
+    /* Strip non-alphanumeric, uppercase, insert space after 3rd char */
+    var clean = val.replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 6);
+    if (clean.length > 3) {
+      return clean.slice(0, 3) + " " + clean.slice(3);
+    }
+    return clean;
+  }
+
+  function isValidPostal(val) {
+    /* Accept 3-char FSA (e.g. K1A) or full 6-char code (e.g. K1A 0A6) */
+    return /^[A-Z]\d[A-Z]$/.test(val) || /^[A-Z]\d[A-Z] \d[A-Z]\d$/.test(val);
+  }
+
+  postalInput.addEventListener("input", function () {
+    var formatted = formatPostal(postalInput.value);
+    postalInput.value = formatted;
+    ohtBtn.disabled = !isValidPostal(formatted);
+    postalHint.style.display = "none";
+  });
+
+  ohtBtn.addEventListener("click", function () {
+    var code = postalInput.value.trim();
+    var fsa = code.slice(0, 3).toUpperCase();
+    var localMatch = ONTARIO_OHTS[fsa];
+
+    if (localMatch) {
+      var targetUrl = localMatch.url || OHT_URL;
+      var ottawaBtn = "";
+      if (localMatch.name === "Ottawa OHT") {
+        ottawaBtn =
+          "<br><a href='https://coalitionottawa.ca/map/' target='_blank' rel='noopener noreferrer' " +
+          "style='display:inline-block; margin-top:8px; padding:7px 14px; background-color:#28a745; color:#fff; border-radius:6px; text-decoration:none; font-weight:bold; font-size:13px;'>" +
+          "Ottawa Coalition Map &rarr;</a>";
+      }
+      postalHint.innerHTML =
+        "<div style='font-size:13px; color:#1b5e20; font-weight:bold; margin-bottom:4px;'>&#10003; OHT identified for " + fsa + "</div>" +
+        "<div style='font-size:15px; font-weight:bold; color:#003366; margin-bottom:10px;'>" + localMatch.name + " &mdash; " + localMatch.area + "</div>" +
+        "<a href='" + targetUrl + "' target='_blank' rel='noopener noreferrer' " +
+        "style='display:inline-block; padding:8px 16px; background-color:#2e7d32; color:#fff; border-radius:6px; text-decoration:none; font-weight:bold; font-size:13px;'>" +
+        "Open " + localMatch.name + " &rarr;</a>" + ottawaBtn;
+    } else {
+      postalHint.innerHTML =
+        "<div style='font-size:13px; color:#7a4f00; font-weight:bold; margin-bottom:4px;'>&#9888; No match found for <strong>" + fsa + "</strong></div>" +
+        "<div style='font-size:13px; color:#555; margin-bottom:8px;'>This postal code may not be in our directory. Search the full list:</div>" +
+        "<a href='" + OHT_URL + "' target='_blank' rel='noopener noreferrer' " +
+        "style='display:inline-block; padding:8px 14px; background-color:#003366; color:#fff; border-radius:6px; text-decoration:none; font-weight:bold; font-size:13px;'>" +
+        "View All Ontario Health Teams &rarr;</a>";
+    }
+    postalHint.style.display = "block";
+  });
+
+  /* =================================================================
+     TORONTO OHT LOOKUP TABLE
+     Source: IDS OHT Catchments Backgrounder + North Toronto OHT (confirmed)
+     Toronto OHTs are defined by City of Toronto Neighbourhood numbers.
+     FSA mapping below is a neighbourhood-based approximation.
+     ================================================================= */
+  var TORONTO_OHTS = {
+    /* North Toronto OHT — confirmed by northtorontooht.ca */
+    "M4G":{ name:"North Toronto OHT", url:"https://northtorontooht.ca/primarycare/" },
+    "M4N":{ name:"North Toronto OHT", url:"https://northtorontooht.ca/primarycare/" },
+    "M4P":{ name:"North Toronto OHT", url:"https://northtorontooht.ca/primarycare/" },
+    "M4R":{ name:"North Toronto OHT", url:"https://northtorontooht.ca/primarycare/" },
+    "M4S":{ name:"North Toronto OHT", url:"https://northtorontooht.ca/primarycare/" },
+    "M4T":{ name:"North Toronto OHT", url:"https://northtorontooht.ca/primarycare/" },
+    "M4V":{ name:"North Toronto OHT", url:"https://northtorontooht.ca/primarycare/" },
+    "M5M":{ name:"North Toronto OHT", url:"https://northtorontooht.ca/primarycare/" },
+    "M5N":{ name:"North Toronto OHT", url:"https://northtorontooht.ca/primarycare/" },
+    "M5P":{ name:"North Toronto OHT", url:"https://northtorontooht.ca/primarycare/" },
+    "M5R":{ name:"North Toronto OHT", url:"https://northtorontooht.ca/primarycare/" },
+    /* East Toronto Health Partners OHT (Neighbourhoods 44, 54–69) */
+    "M3C":{ name:"East Toronto Health Partners OHT", url:"https://ethp.ca/" },
+    "M4B":{ name:"East Toronto Health Partners OHT", url:"https://ethp.ca/" },
+    "M4C":{ name:"East Toronto Health Partners OHT", url:"https://ethp.ca/" },
+    "M4E":{ name:"East Toronto Health Partners OHT", url:"https://ethp.ca/" },
+    "M4H":{ name:"East Toronto Health Partners OHT", url:"https://ethp.ca/" },
+    "M4J":{ name:"East Toronto Health Partners OHT", url:"https://ethp.ca/" },
+    "M4K":{ name:"East Toronto Health Partners OHT", url:"https://ethp.ca/" },
+    "M4L":{ name:"East Toronto Health Partners OHT", url:"https://ethp.ca/" },
+    "M4M":{ name:"East Toronto Health Partners OHT", url:"https://ethp.ca/" },
+    /* Downtown East Toronto OHT (Neighbourhoods 70–74, 98, 167, 168) */
+    "M4W":{ name:"Downtown East Toronto OHT", url:"https://detoht.ca/" },
+    "M4X":{ name:"Downtown East Toronto OHT", url:"https://detoht.ca/" },
+    "M4Y":{ name:"Downtown East Toronto OHT", url:"https://detoht.ca/" },
+    "M5A":{ name:"Downtown East Toronto OHT", url:"https://detoht.ca/" },
+    "M5B":{ name:"Downtown East Toronto OHT", url:"https://detoht.ca/" },
+    "M5C":{ name:"Downtown East Toronto OHT", url:"https://detoht.ca/" },
+    "M5E":{ name:"Downtown East Toronto OHT", url:"https://detoht.ca/" },
+    /* Mid-West Toronto OHT (Neighbourhoods 78–84, 86, 91–96, 107, 109–110, 162–172) */
+    "M5S":{ name:"Mid-West Toronto OHT", url:"https://www.midwesttorontooht.ca" },
+    "M5T":{ name:"Mid-West Toronto OHT", url:"https://www.midwesttorontooht.ca" },
+    "M5V":{ name:"Mid-West Toronto OHT", url:"https://www.midwesttorontooht.ca" },
+    "M6C":{ name:"Mid-West Toronto OHT", url:"https://www.midwesttorontooht.ca" },
+    "M6E":{ name:"Mid-West Toronto OHT", url:"https://www.midwesttorontooht.ca" },
+    "M6G":{ name:"Mid-West Toronto OHT", url:"https://www.midwesttorontooht.ca" },
+    "M6H":{ name:"Mid-West Toronto OHT", url:"https://www.midwesttorontooht.ca" },
+    "M6J":{ name:"Mid-West Toronto OHT", url:"https://www.midwesttorontooht.ca" },
+    "M6K":{ name:"Mid-West Toronto OHT", url:"https://www.midwesttorontooht.ca" },
+    "M6M":{ name:"Mid-West Toronto OHT", url:"https://www.midwesttorontooht.ca" },
+    "M6N":{ name:"Mid-West Toronto OHT", url:"https://www.midwesttorontooht.ca" },
+    /* North Western Toronto OHT (Neighbourhoods 8, 21–31, 108, 112–113, 154–155) */
+    "M3J":{ name:"North Western Toronto OHT", url:"https://nwtoht.ca/" },
+    "M3K":{ name:"North Western Toronto OHT", url:"https://nwtoht.ca/" },
+    "M3L":{ name:"North Western Toronto OHT", url:"https://nwtoht.ca/" },
+    "M3M":{ name:"North Western Toronto OHT", url:"https://nwtoht.ca/" },
+    "M3N":{ name:"North Western Toronto OHT", url:"https://nwtoht.ca/" },
+    "M6A":{ name:"North Western Toronto OHT", url:"https://nwtoht.ca/" },
+    "M6L":{ name:"North Western Toronto OHT", url:"https://nwtoht.ca/" },
+    "M9L":{ name:"North Western Toronto OHT", url:"https://nwtoht.ca/" },
+    "M9M":{ name:"North Western Toronto OHT", url:"https://nwtoht.ca/" },
+    "M9N":{ name:"North Western Toronto OHT", url:"https://nwtoht.ca/" },
+    "M9P":{ name:"North Western Toronto OHT", url:"https://nwtoht.ca/" },
+    /* North York Toronto Health Partners OHT (Neighbourhoods 33–53, 116, 118–119, 149–153) */
+    "M2H":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    "M2J":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    "M2K":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    "M2L":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    "M2M":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    "M2N":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    "M2P":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    "M2R":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    "M3A":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    "M3B":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    "M3H":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    "M4A":{ name:"North York Toronto Health Partners OHT", url:"https://www.northyorktorontohealthpartners.ca" },
+    /* Scarborough OHT (Neighbourhoods 116, 118–126, 128–130, 133–148, 156–157) */
+    "M1B":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1C":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1E":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1G":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1H":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1J":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1K":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1L":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1M":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1N":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1P":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1R":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1S":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1T":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1V":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1W":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    "M1X":{ name:"Scarborough OHT", url:"https://en.soht.ca/" },
+    /* West Toronto OHT (Neighbourhoods 9, 15–16, 18, 85–90, 111, 114–115, 160–161) */
+    "M6P":{ name:"West Toronto OHT", url:"https://www.wtoht.ca" },
+    "M6R":{ name:"West Toronto OHT", url:"https://www.wtoht.ca" },
+    "M6S":{ name:"West Toronto OHT", url:"https://www.wtoht.ca" },
+    "M8V":{ name:"West Toronto OHT", url:"https://www.wtoht.ca" },
+    "M8W":{ name:"West Toronto OHT", url:"https://www.wtoht.ca" },
+    "M8X":{ name:"West Toronto OHT", url:"https://www.wtoht.ca" },
+    "M8Y":{ name:"West Toronto OHT", url:"https://www.wtoht.ca" },
+    "M8Z":{ name:"West Toronto OHT", url:"https://www.wtoht.ca" },
+    "M9A":{ name:"West Toronto OHT", url:"https://www.wtoht.ca" },
+    /* South Etobicoke / Mississauga OHT (Toronto Neighbourhoods 10–13, 19–20, 158–159) */
+    "M9B":{ name:"Mississauga Health OHT", url:"https://www.ontario.ca/page/ontario-health-teams" },
+    "M9C":{ name:"Mississauga Health OHT", url:"https://www.ontario.ca/page/ontario-health-teams" },
+    /* North Etobicoke / Central West OHT (Toronto Neighbourhoods 1–7) */
+    "M9R":{ name:"Central West OHT", url:"https://centralwestoht.ca/" },
+    "M9V":{ name:"Central West OHT", url:"https://centralwestoht.ca/" },
+    "M9W":{ name:"Central West OHT", url:"https://centralwestoht.ca/" }
+  };
+
+  /* =================================================================
+     OHT REFERRAL PATHWAYS
+     Format per OHT:
+       red:    { label, phone, formUrl, formLabel, detailUrl, detailLabel }
+       yellow: { label, phone, formUrl, formLabel }
+       green:  { label, phone, formUrl, formLabel }
+       extra:  { label, url }  — optional extra resource link
+     ================================================================= */
+  var OHT_PATHWAYS = {
+    "North York Toronto Health Partners OHT": {
+      red: {
+        label: "Urgent referral — NYG Access Clinic",
+        phone: "647-564-783",
+        formUrl: "https://forms.office.com/pages/responsepage.aspx?id=r1eSHo73-kmsqmq4KMm_Wiq4-0ubRJtPoRigluOsTPlUNVUyN1hUVklaQzRRNVkwWDdYUlY4NzM3SyQlQCN0PWcu&route=shorturl",
+        formLabel: "Referral Form",
+        detailUrl: "https://nythp.ca/north-york-general-access-care-clinic/",
+        detailLabel: "North York General Access Care Clinic | NYTHP - PCN"
+      },
+      yellow: {
+        label: "CHC (Equity-deserving) — Flemingdon Health Centre",
+        phone: "416-429-4991 ext. 280",
+        formUrl: "https://ocean.cognisantmd.com/intake/IntakePortal.html?eReqRef=9b5061e8-2c28-4830-af3e-4663a9882087",
+        formLabel: "Ocean Referral Form"
+      },
+      green: {
+        label: "Centralized intake — Better Living",
+        phone: "416-443-9775",
+        formUrl: "",
+        formLabel: "Ocean Referral Form"
+      }
+    },
+    "East Toronto Health Partners OHT": {
+      red: {
+        label: "Urgent referral — MGH Primary Care Access Clinic (PCAC)",
+        phone: "416-461-8272 ext. 2766",
+        email: "pcac@tehn.ca",
+        formUrl: "",
+        formLabel: ""
+      },
+      yellow: {
+        label: "CHC (Equity-deserving) — Flemingdon Health Centre",
+        phone: "416-429-4991 ext. 280",
+        formUrl: "https://ocean.cognisantmd.com/intake/IntakePortal.html?eReqRef=9b5061e8-2c28-4830-af3e-4663a9882087",
+        formLabel: "Ocean Referral Form"
+      },
+      green: {
+        label: "Centralized intake — ETHP",
+        phone: "",
+        formUrl: "https://ocean.cognisantmd.com/eRequest/af1b4fbe-6907-4034-ba5b-70ec24bc72ac",
+        formLabel: "ETHP Centralized Intake Form"
+      },
+      extra: {
+        label: "Toronto Central Health Services Directory",
+        url: "https://torontocentralhealthline.ca"
+      }
+    }
+  };
+
+  function buildPathwayButtons(ohtName) {
+    var p = OHT_PATHWAYS[ohtName];
+    if (!p) return "";
+
+    function btn(color, bg, borderColor, data) {
+      if (!data) return "";
+      var contacts = "";
+      if (data.phone) contacts += "<span style='font-size:12px;'>&#128222; " + data.phone + "</span> ";
+      if (data.email) contacts += "<span style='font-size:12px;'>&#9993; " + data.email + "</span> ";
+      var links = "";
+      if (data.formUrl) {
+        links += "<a href='" + data.formUrl + "' target='_blank' rel='noopener noreferrer' " +
+          "style='display:inline-block; margin-top:6px; margin-right:6px; padding:5px 12px; background-color:" + bg + "; color:#fff; border-radius:5px; text-decoration:none; font-size:12px; font-weight:bold;'>" +
+          (data.formLabel || "Referral Form") + " &rarr;</a>";
+      }
+      if (data.detailUrl) {
+        links += "<a href='" + data.detailUrl + "' target='_blank' rel='noopener noreferrer' " +
+          "style='display:inline-block; margin-top:6px; padding:5px 12px; background-color:#555; color:#fff; border-radius:5px; text-decoration:none; font-size:12px; font-weight:bold;'>" +
+          (data.detailLabel || "More info") + " &rarr;</a>";
+      }
+      return "<div style='margin-top:10px; padding:10px 12px; border-left:4px solid " + borderColor + "; background:" + color + "; border-radius:0 6px 6px 0;'>" +
+        "<div style='font-size:13px; font-weight:bold; color:#111; margin-bottom:4px;'>" + data.label + "</div>" +
+        "<div style='margin-bottom:4px;'>" + contacts + "</div>" +
+        links +
+        "</div>";
+    }
+
+    var html = btn("#fff3cd", "#c8830a", "#f0a500", p.red) +
+               btn("#d4edda", "#1a6b30", "#28a745", p.green) +
+               btn("#fff8e1", "#8a6800", "#f0c000", p.yellow);
+
+    if (p.extra) {
+      html += "<div style='margin-top:10px; font-size:12px; color:#555;'>Other Toronto resources: " +
+        "<a href='" + p.extra.url + "' target='_blank' rel='noopener noreferrer' style='color:#003366; font-weight:bold;'>" + p.extra.label + "</a></div>";
+    }
+    return html;
+  }
+
+  var torontoInput = document.getElementById("toronto-postal-input");
+  var torontoBtn = document.getElementById("toronto-lookup-btn");
+  var torontoResult = document.getElementById("toronto-oht-result");
+
+  torontoInput.addEventListener("input", function () {
+    torontoInput.value = torontoInput.value.replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 3);
+    torontoResult.style.display = "none";
+  });
+
+  torontoBtn.addEventListener("click", function () {
+    var fsa = torontoInput.value.trim().toUpperCase();
+    torontoResult.style.display = "block";
+
+    if (fsa.length < 3) {
+      torontoResult.innerHTML = "<span style='color:#c00; font-size:13px;'>Please enter the first 3 characters of the postal code (e.g. M4N).</span>";
+      return;
+    }
+
+    var match = TORONTO_OHTS[fsa];
+    if (match) {
+      var pathwayHtml = buildPathwayButtons(match.name);
+      var legend = pathwayHtml
+        ? "<div style='font-size:11px; color:#555; margin-top:12px; border-top:1px solid #ddd; padding-top:8px;'>" +
+          "<span style='background:#fff3cd; border:1px solid #f0a500; padding:2px 6px; border-radius:3px; margin-right:6px;'>&#128308; Urgent</span>" +
+          "<span style='background:#d4edda; border:1px solid #28a745; padding:2px 6px; border-radius:3px; margin-right:6px;'>&#128994; Partner primary care</span>" +
+          "<span style='background:#fff8e1; border:1px solid #f0c000; padding:2px 6px; border-radius:3px;'>&#128993; CHC equity-deserving</span></div>"
+        : "";
+      torontoResult.innerHTML =
+        "<div style='font-size:13px; color:#1b5e20; font-weight:bold; margin-bottom:4px;'>&#10003; OHT identified for " + fsa + "</div>" +
+        "<div style='font-size:15px; font-weight:bold; color:#003366; margin-bottom:6px;'>" + match.name + "</div>" +
+        "<a href='" + match.url + "' target='_blank' rel='noopener noreferrer' " +
+        "style='display:inline-block; padding:7px 14px; background-color:#003366; color:#fff; border-radius:6px; text-decoration:none; font-weight:bold; font-size:13px;'>" +
+        "Go to " + match.name + " &rarr;</a>" +
+        pathwayHtml + legend;
+    } else {
+      torontoResult.innerHTML =
+        "<div style='font-size:13px; color:#7a4f00; font-weight:bold; margin-bottom:4px;'>&#9888; No match found for <strong>" + fsa + "</strong></div>" +
+        "<div style='font-size:13px; color:#555;'>This postal code may not yet be in our directory. Use the Toronto Health &amp; Social Services Directory below to search manually.</div>";
+    }
+  });
+
+  /* Allow Enter key to trigger lookup */
+  torontoInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") torontoBtn.click();
+  });
+
+})();
+</script>
+
+</body>
+</html>
