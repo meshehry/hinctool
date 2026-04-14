@@ -1026,9 +1026,55 @@ p.disclaimer {
       extra: {
         label: "Toronto Central Health Services Directory",
         url: "https://torontocentralhealthline.ca"
-      }
+      },
+      partners: [
+        { name:"Flemingdon Health Centre", address:"10 Gateway Blvd, Toronto ON M3C 3A1", geo:"Catchment area — see map", status:"ACCEPTING" },
+        { name:"Access Alliance", address:"3079 Danforth Ave, Scarborough, ON M1L 1A8", geo:"M4C, M1L, M3C, M6N, M5J, M5V", status:"ACCEPTING" },
+        { name:"South Riverdale CHC", address:"955 Queen St E, Toronto, ON M4M 3P3", geo:"O'Connor south to Lake, DVP east to Coxwell", status:"ACCEPTING" },
+        { name:"East End CHC", address:"1619 Queen St E, Toronto, ON M4L 1G4", geo:"Greenwood/Coxwell to Victoria Park Ave, O'Connor to Lake", status:"NOT ACCEPTING YET" },
+        { name:"Bridgepoint FHT", address:"430 Broadview Ave, Toronto, ON M4K 2N1", geo:"M4K, M4M, M4C, M4L", status:"ACCEPTING" },
+        { name:"South East Toronto FHT", address:"1871 Danforth Ave / 840 Coxwell Ave Suite 105", geo:"East Toronto", status:"PAUSED" },
+        { name:"Don Mills FHT", address:"20 Wynford Dr, Suite 200, Toronto, ON M3C 1J4", geo:"Priority: M3C, M4C, M2J", status:"NOT ACCEPTING YET" },
+        { name:"Magenta Health", address:"625 Queen St E #108 / 418 Eglinton Ave W #200 / 1874 Queen St E", geo:"East Toronto", status:"ACCEPTING" },
+        { name:"Unify Health", address:"25 Industrial St Units 206–208, Toronto, M4G 1Z2", geo:"M3C, M4C, M4G, M4Y", status:"ACCEPTING" },
+        { name:"Albany Medical Clinic", address:"807 Broadview Ave, Toronto, ON M4K 2P8", geo:"M4K — transit-accessible (near Broadview Stn)", status:"ACCEPTING" },
+        { name:"Victoria Medical Group (VMG)", address:"201-1252 Lawrence Ave E, North York, ON M3A 1C3", geo:"North York", status:"ACCEPTING" },
+        { name:"Thorncliffe Medical Group (TMG)", address:"B6-45 Overlea Blvd, East York, ON M4H 1C3", geo:"East Toronto", status:"ACCEPTING" },
+        { name:"Health Access Taylor Massey (HATM)", address:"4 The Market Pl, East York, ON M4C 5M2", geo:"Crescent Town, Massey Sq, Dawes Rd — E of Woodbine, W of Warden, N of Danforth, S of St. Clair", status:"ACCEPTING" },
+        { name:"Health Access Thorncliffe Park (HATP)", address:"45 Overlea Blvd 2nd Floor, Toronto, ON M4H 1C3", geo:"Thorncliffe Park", status:"ACCEPTING" }
+      ]
     }
   };
+
+  function buildPartnerTable(partners) {
+    if (!partners || !partners.length) return "";
+    var rows = "";
+    for (var i = 0; i < partners.length; i++) {
+      var p = partners[i];
+      var statusColor = p.status === "ACCEPTING" ? "#1a6b30" :
+                        p.status === "PAUSED" ? "#7a4f00" : "#8b0000";
+      var statusBg = p.status === "ACCEPTING" ? "#d4edda" :
+                     p.status === "PAUSED" ? "#fff3cd" : "#f8d7da";
+      rows +=
+        "<tr style='border-bottom:1px solid #eee;'>" +
+        "<td style='padding:7px 8px; font-size:12px; font-weight:bold; color:#003366;'>" + p.name + "</td>" +
+        "<td style='padding:7px 8px; font-size:11px; color:#444;'>" + p.address + "</td>" +
+        "<td style='padding:7px 8px; font-size:11px; color:#555;'>" + p.geo + "</td>" +
+        "<td style='padding:7px 8px;'><span style='font-size:11px; font-weight:bold; color:" + statusColor + "; background:" + statusBg + "; padding:2px 7px; border-radius:4px; white-space:nowrap;'>" + p.status + "</span></td>" +
+        "</tr>";
+    }
+    return "<div id='ethp-partner-table' style='display:none; margin-top:12px; overflow-x:auto;'>" +
+      "<table style='width:100%; border-collapse:collapse; font-family:Arial,sans-serif;'>" +
+      "<thead><tr style='background:#003366; color:#fff;'>" +
+      "<th style='padding:8px; font-size:12px; text-align:left;'>Organization</th>" +
+      "<th style='padding:8px; font-size:12px; text-align:left;'>Address</th>" +
+      "<th style='padding:8px; font-size:12px; text-align:left;'>Geographic Focus</th>" +
+      "<th style='padding:8px; font-size:12px; text-align:left;'>Status</th>" +
+      "</tr></thead><tbody>" + rows + "</tbody></table></div>" +
+      "<button onclick=\"var t=document.getElementById('ethp-partner-table'); var b=document.getElementById('ethp-toggle-btn'); if(t.style.display==='none'){t.style.display='block';b.textContent='Hide Partner Organizations ▲';}else{t.style.display='none';b.textContent='View Partner Organizations ▼';}\" " +
+      "id='ethp-toggle-btn' style='margin-top:10px; padding:7px 14px; background:#003366; color:#fff; border:none; border-radius:6px; font-size:13px; font-weight:bold; cursor:pointer;'>" +
+      "View Partner Organizations ▼</button>";
+  }
 
   function buildPathwayButtons(ohtName) {
     var p = OHT_PATHWAYS[ohtName];
@@ -1065,6 +1111,11 @@ p.disclaimer {
       html += "<div style='margin-top:10px; font-size:12px; color:#555;'>Other Toronto resources: " +
         "<a href='" + p.extra.url + "' target='_blank' rel='noopener noreferrer' style='color:#003366; font-weight:bold;'>" + p.extra.label + "</a></div>";
     }
+
+    if (p.partners) {
+      html += buildPartnerTable(p.partners);
+    }
+
     return html;
   }
 
